@@ -1,0 +1,108 @@
+export MYSQL_PW
+
+function mysqlroot() {
+    if [[ X"$MYSQL_PW" == X"" ]]; then
+        printf "Enter MySQL root password: "
+        read -s MYSQL_PW -p
+    fi
+    mysql -u root -p${MYSQL_PW}
+    if [[ $? -ne 0 ]]; then
+        export MYSQL_PW=''
+    fi
+}
+
+function mysqlexec() {
+    if [[ X"$MYSQL_PW" == X"" ]]; then
+        printf "Enter MySQL root password: "
+        read -s MYSQL_PW -p
+    fi
+    mysql -u root -p${MYSQL_PW} -e "$@"
+    if [[ $? -ne 0 ]]; then
+        export MYSQL_PW=''
+    fi
+}
+
+#### System wise
+
+# show character set
+alias mysql_charsets="mysqlexec 'SHOW CHARACTER SET;'"
+
+# show init default character
+alias mysql_charsets="mysqlexec \"SHOW global variables like 'init_conn';\""
+
+# show general log status
+alias mysql_log_status="mysqlexec \"show global variables like 'general_log';\""
+
+# enable general log
+alias mysql_log_on="mysqlexec \"set global general_log = 'on';\""
+
+# disable general log
+alias mysql_log_off="mysqlexec \"set global general_log = 'off';\""
+
+# show log path
+alias mysql_log_path="mysqlexec \"show global variables like '%general_log_file%';\""
+
+# show read mode
+alias mysql_rw_status="mysqlexec \"show variables like 'read_only';\""
+alias mysql_rw_on="mysqlexec \"set global read_only=off;\"; mysql_rw_mode"
+alias mysql_rw_off="mysqlexec \"set global read_only=on;\"; mysql_rw_mode"
+
+# show users
+alias mysql_users="mysqlexec \"select * from mysql.user \G\""
+
+
+#### replication
+# ignore 1 replication record
+function mysql_ignore_one_replication_error() {
+    echo 'SET GLOBAL sql_slave_skip_counter = 1; START SLAVE;' | mysqlroot
+}
+
+# ignore all
+function mysql_ignore_all_replication_error() {
+    while true; do ( echo 'SET GLOBAL sql_slave_skip_counter = 1; START SLAVE;' | mysqlroot ) || sleep 1; done
+}
+
+# show slave status
+alias mysql_slave_status='mysqlexec "show slave status \G;"'
+
+# show master status
+alias mysql_master_status='mysqlexec "show master status ;"'
+
+#### process
+
+# show process
+alias mysql_process='mysqlexec "show full processlist;"'
+
+# kill process by ID
+function mysql_kill() {
+    ID=$1
+    mysqlexec "kill $ID;"
+}
+
+####### useful command note
+
+#### db/table management
+
+## create database with character set
+# > CREATE DATABASE XXXX  CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+#### permission management
+
+## add user
+# > GRANT USAGE ON *.* TO 'username'@'hostname' IDENTIFIED BY 'PASSWD'
+
+## grant permission for user
+# > GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, REFERENCES ON `DBName`.* TO 'username'@'hostname' ;
+
+## remove some permission from user
+# > REVOKE SELECT, DELETE ON `DBName`.* FROM 'username'@'hostname';
+
+## remove user
+# > DROP USER 'username@'hostname';
+
+## show user granted permission
+# > SHOW GRANTS FOR 'legochen_wp'@'localhost';
+# > SHOW GRANTS <= will show current user
+
+## refresh user priviledges
+# > FLUSH PRIVILEDGES

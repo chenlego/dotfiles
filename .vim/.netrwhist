@@ -1,0 +1,8 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =6
+let g:netrw_dirhist_1='/Users/legochen'
+let g:netrw_dirhist_2='/Users/legochen/dev/moneyball/yi13n/build'
+let g:netrw_dirhist_3='/Users/legochen/dev/gradle/example02/build'
+let g:netrw_dirhist_4='/Users/legochen/dev/moneyball/Intent/app/libraries/framework/snoopy_android'
+let g:netrw_dirhist_5='/Users/legochen/dev/moneyball/search_lego/framework/snoopy_android'
+let g:netrw_dirhist_6='/Users/legochen/dev/moneyball/ysdk_learn/scoreboard/build/generated/source/r/debug/com/yahoo/mobile/client/android/moneyball'
