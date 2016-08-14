@@ -1,3 +1,5 @@
+#!/bin/bash
+
 export nc="\e[0m"                  # no color
 export bold="\e[1m"
 export underline="\e[4m"

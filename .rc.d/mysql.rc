@@ -1,3 +1,5 @@
+#!/bin/bash
+
 export MYSQL_PW
 
 function mysqlroot() {
@@ -59,6 +61,8 @@ function mysql_ignore_one_replication_error() {
 
 # ignore all
 function mysql_ignore_all_replication_error() {
+    # this command only be executed when slave in stop status
+    # if slave status in running status, this command will be protected by mysql servver and cannot be executed
     while true; do ( echo 'SET GLOBAL sql_slave_skip_counter = 1; START SLAVE;' | mysqlroot ) || sleep 1; done
 }
 
