@@ -1,0 +1,41 @@
+#!/bin/bash
+
+function git_cmmit() {
+    git commit -am "$@"
+}
+
+function git_clone() {
+    repo=$1
+    git clone $repo
+}
+
+function git_checkout() {
+    branch=$1
+    git checkout $branch
+}
+
+function git_branch() {
+    branch=$1
+    git branch $branch
+}
+
+function git_config() {
+    git config --list
+}
+
+function git_pull() {
+    git pull upstream master
+}
+
+function git_remote() {
+    repo=$1
+    git remote add upstream $repo
+}
+
+function git_remote_show() {
+    git remote -v
+}
+
+function git_push() {
+    git push origin master
+}
